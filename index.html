@@ -2,93 +2,23 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Danh sách công việc</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-      max-width: 600px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-    }
-    #new-task {
-      width: 70%;
-      padding: 10px;
-      font-size: 16px;
-    }
-    #add-btn {
-      padding: 10px 15px;
-      font-size: 16px;
-      background: #28a745;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      background: white;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-left: 5px solid #28a745;
-    }
-    .delete-btn {
-      background: red;
-      color: white;
-      border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-  </style>
+  <title>Todo App</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-  <h1>📋 Công việc cần làm</h1>
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-xl mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-6">📋 Danh sách công việc</h1>
 
-  <input type="text" id="new-task" placeholder="Nhập công việc mới...">
-  <button id="add-btn">Thêm</button>
+    <div class="flex gap-2 mb-4">
+      <input id="task-input" type="text" placeholder="Nhập công việc..." class="flex-1 px-4 py-2 rounded border border-gray-300">
+      <input id="deadline-input" type="datetime-local" class="px-2 py-2 border rounded border-gray-300">
+      <button id="add-btn" class="bg-green-500 text-white px-4 py-2 rounded">Thêm</button>
+      <button id="clear-all-btn" class="bg-red-500 text-white px-3 py-2 rounded">Xoá tất</button>
+    </div>
 
-  <ul id="task-list">
-    <!-- Các công việc sẽ được thêm vào đây -->
-  </ul>
+    <ul id="task-list" class="space-y-3"></ul>
+  </div>
 
-  <script>
-    const taskInput = document.getElementById("new-task");
-    const addBtn = document.getElementById("add-btn");
-    const taskList = document.getElementById("task-list");
-
-    addBtn.onclick = () => {
-      const taskText = taskInput.value.trim();
-      if (taskText === "") return;
-
-      const li = document.createElement("li");
-      li.innerHTML = `
-        <span>${taskText}</span>
-        <button class="delete-btn">❌</button>
-      `;
-      taskList.appendChild(li);
-
-      // Gán sự kiện xoá
-      li.querySelector(".delete-btn").onclick = () => {
-        li.remove();
-      };
-
-      taskInput.value = "";
-      taskInput.focus();
-    };
-
-    // Cho phép nhấn Enter để thêm
-    taskInput.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") addBtn.click();
-    });
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

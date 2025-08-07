@@ -1,18 +1,70 @@
-let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-
 const taskInput = document.getElementById("task-input");
 const deadlineInput = document.getElementById("deadline-input");
 const addBtn = document.getElementById("add-btn");
 const clearAllBtn = document.getElementById("clear-all-btn");
 const taskList = document.getElementById("task-list");
 
-function saveTasks() {
-  localStorage.setItem("tasks", JSON.stringify(tasks));
+let tasks = [];
+
+// Tải từ server
+async function fetchTasks() {
+  const res = await fetch("http://localhost:3000/api/tasks");
+  tasks = await res.json();
+  renderTasks();
+}
+
+// Thêm công việc
+async function addTask() {
+  const text = taskInput.value.trim();
+  const deadline = deadlineInput.value;
+  if (!text) return;
+
+  const res = await fetch("http://localhost:3000/api/tasks", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text, deadline }),
+  });
+
+  const newTask = await res.json();
+  tasks.push(newTask);
+  renderTasks();
+
+  taskInput.value = "";
+  deadlineInput.value = "";
+  taskInput.focus();
+}
+
+// Xoá công việc
+async function deleteTask(id) {
+  await fetch(`http://localhost:3000/api/tasks/${id}`, { method: "DELETE" });
+  tasks = tasks.filter(t => t.id !== id);
+  renderTasks();
+}
+
+// Sửa công việc
+async function editTask(id, newText) {
+  const task = tasks.find(t => t.id === id);
+  if (!task) return;
+
+  task.text = newText;
+
+  await fetch(`http://localhost:3000/api/tasks/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text: newText }),
+  });
+}
+
+// Xoá tất cả
+async function clearAllTasks() {
+  await fetch("http://localhost:3000/api/tasks", { method: "DELETE" });
+  tasks = [];
+  renderTasks();
 }
 
 function renderTasks() {
   taskList.innerHTML = "";
-  tasks.forEach((task, index) => {
+  tasks.forEach(task => {
     const li = document.createElement("li");
     li.className = "bg-white p-4 rounded shadow flex justify-between items-start gap-4";
 
@@ -23,8 +75,11 @@ function renderTasks() {
     taskText.textContent = task.text;
     taskText.className = "font-medium text-gray-800 editable-task";
     taskText.onblur = () => {
-      tasks[index].text = taskText.textContent.trim();
-      saveTasks();
+      const newText = taskText.textContent.trim();
+      if (newText !== task.text) {
+        task.text = newText;
+        editTask(task.id, newText);
+      }
     };
 
     const deadline = document.createElement("div");
@@ -37,11 +92,7 @@ function renderTasks() {
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "❌";
     deleteBtn.className = "text-red-500 hover:text-red-700 font-bold";
-    deleteBtn.onclick = () => {
-      tasks.splice(index, 1);
-      saveTasks();
-      renderTasks();
-    };
+    deleteBtn.onclick = () => deleteTask(task.id);
 
     li.appendChild(left);
     li.appendChild(deleteBtn);
@@ -49,26 +100,10 @@ function renderTasks() {
   });
 }
 
-addBtn.onclick = () => {
-  const text = taskInput.value.trim();
-  const deadline = deadlineInput.value;
-  if (!text) return;
-
-  tasks.push({ text, deadline });
-  saveTasks();
-  renderTasks();
-
-  taskInput.value = "";
-  deadlineInput.value = "";
-  taskInput.focus();
-};
+addBtn.onclick = addTask;
 
 clearAllBtn.onclick = () => {
-  if (confirm("Xoá tất cả công việc?")) {
-    tasks = [];
-    saveTasks();
-    renderTasks();
-  }
+  if (confirm("Xoá tất cả công việc?")) clearAllTasks();
 };
 
 [taskInput, deadlineInput].forEach(input => {
@@ -77,5 +112,5 @@ clearAllBtn.onclick = () => {
   });
 });
 
-// Khởi động khi tải trang
-renderTasks();
+// Tự động tải công việc khi load trang
+fetchTasks();

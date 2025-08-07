@@ -7,7 +7,10 @@
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
   <div class="max-w-xl mx-auto">
-    <h1 class="text-3xl font-bold text-center mb-6">📋 Danh sách công việc</h1>
+    <h1 class="text-3xl font-bold text-center mb-2">📋 Danh sách công việc</h1>
+
+    <!-- 🔔 Đồng hồ -->
+    <div id="clock" class="text-center text-xl font-semibold text-blue-600 mb-4">🕒 --:--:--</div>
 
     <div class="flex gap-2 mb-4">
       <input id="task-input" type="text" placeholder="Nhập công việc..." class="flex-1 px-4 py-2 rounded border border-gray-300">
@@ -19,6 +22,23 @@
     <ul id="task-list" class="space-y-3"></ul>
   </div>
 
+  <!-- 🔁 Script chính -->
   <script src="app.js"></script>
+
+  <!-- 🕒 Script đồng hồ -->
+  <script>
+    function updateClock() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString("vi-VN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+      document.getElementById("clock").textContent = `🕒 ${timeString}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>

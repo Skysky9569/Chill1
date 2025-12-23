@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Vật Lí 10 - Ôn tập</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .quiz-info {
+            text-align: center;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #666;
+        }
+        .question-box {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            color: #2980b9;
+        }
+        .options label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .options label:hover {
+            background-color: #f0f8ff;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background-color: #219150;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #dff9fb;
+            border: 2px solid #c7ecee;
+            text-align: center;
+            font-size: 1.2em;
+            display: none; /* Ẩn kết quả ban đầu */
+            border-radius: 8px;
+        }
+        
+        /* CSS cho trạng thái đúng/sai sau khi nộp bài */
+        .correct-answer {
+            background-color: #d4edda !important;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .wrong-answer {
+            background-color: #f8d7da !important;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .explanation {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+            padding-left: 28px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Ôn tập Vật Lí 10</h1>
+    <div class="quiz-info">Đề bài gồm 12 câu hỏi trắc nghiệm. Hãy chọn đáp án đúng nhất.</div>
+
+    <form id="quizForm">
+        <div id="quiz-container">
+            </div>
+        <button type="button" class="btn-submit" onclick="submitQuiz()">Nộp bài & Xem kết quả</button>
+    </form>
+
+    <div id="result" class="result-box"></div>
+</div>
+
+<script>
+    // Dữ liệu câu hỏi
+    const quizData = [
+        {
+            q: "Câu 1: Đối tượng nghiên cứu chính của Vật lí học là gì?",
+            a: ["Các chất và sự biến đổi của các chất.", "Các dạng vận động của vật chất và năng lượng.", "Sự sinh trưởng và phát triển của sinh vật.", "Các sự kiện lịch sử và xã hội loài người."],
+            correct: 1 // Index bắt đầu từ 0 (A=0, B=1, C=2, D=3)
+        },
+        {
+            q: "Câu 2: Trong phòng thí nghiệm, biển báo có hình tam giác đều, viền đen hoặc đỏ, nền vàng mang ý nghĩa gì?",
+            a: ["Biển báo cấm thực hiện hành động.", "Biển báo bắt buộc thực hiện.", "Biển báo nguy hiểm hoặc cảnh báo.", "Biển báo chỉ dẫn vị trí thiết bị."],
+            correct: 2
+        },
+        {
+            q: "Câu 3: Một vật chuyển động từ điểm A đến điểm B, sau đó quay trở lại đúng điểm A. Độ dịch chuyển của vật là bao nhiêu?",
+            a: ["Bằng 0.", "Bằng hai lần khoảng cách AB.", "Bằng khoảng cách AB.", "Không xác định được."],
+            correct: 0
+        },
+        {
+            q: "Câu 4: Đại lượng nào sau đây là đại lượng vectơ?",
+            a: ["Tốc độ trung bình.", "Quãng đường.", "Thời gian.", "Vận tốc."],
+            correct: 3
+        },
+        {
+            q: "Câu 5: Trên đồ thị độ dịch chuyển – thời gian (d – t), nếu đồ thị là một đường thẳng nằm ngang song song với trục thời gian thì vật đang ở trạng thái nào?",
+            a: ["Chuyển động thẳng đều.", "Đứng yên.", "Chuyển động nhanh dần đều.", "Chuyển động chậm dần đều."],
+            correct: 1
+        },
+        {
+            q: "Câu 6: Gia tốc là đại lượng đặc trưng cho điều gì?",
+            a: ["Độ nhanh hay chậm của chuyển động.", "Sự thay đổi về hướng của chuyển động.", "Sự thay đổi nhanh hay chậm của vận tốc.", "Tính chất duy trì chuyển động của vật."],
+            correct: 2
+        },
+        {
+            q: "Câu 7: Phương trình vận tốc của một vật là v = 10 + 2t (m/s). Gia tốc của vật là bao nhiêu?",
+            a: ["10 m/s².", "2 m/s².", "5 m/s².", "12 m/s²."],
+            correct: 1
+        },
+        {
+            q: "Câu 8: Đặc điểm nào sau đây KHÔNG phải là đặc điểm của sự rơi tự do?",
+            a: ["Phương thẳng đứng, chiều từ trên xuống dưới.", "Là chuyển động thẳng nhanh dần đều.", "Vận tốc rơi phụ thuộc vào khối lượng của vật.", "Tại cùng một nơi, các vật rơi với cùng một gia tốc."],
+            correct: 2
+        },
+        {
+            q: "Câu 9: Hành khách ngồi trên xe buýt đang chạy thẳng đều thì xe đột ngột hãm phanh. Hành khách sẽ:",
+            a: ["Nghiêng người sang bên phải.", "Nghiêng người sang bên trái.", "Ngả người về phía sau.", "Chúi người về phía trước."],
+            correct: 3
+        },
+        {
+            q: "Câu 10: Theo định luật II Newton, gia tốc của một vật có mối quan hệ như thế nào?",
+            a: ["Tỉ lệ thuận với m, tỉ lệ nghịch với F.", "Tỉ lệ thuận với F, tỉ lệ nghịch với m.", "Tỉ lệ thuận với cả F và m.", "Tỉ lệ nghịch với cả F và m."],
+            correct: 1
+        },
+        {
+            q: "Câu 11: Đặc điểm nào sau đây là SAI khi nói về cặp lực và phản lực?",
+            a: ["Chúng xuất hiện và mất đi đồng thời.", "Chúng là hai lực cân bằng.", "Chúng cùng phương, ngược chiều.", "Chúng có cùng độ lớn."],
+            correct: 1
+        },
+        {
+            q: "Câu 12: Lực căng dây có đặc điểm nào sau đây?",
+            a: ["Luôn hướng dọc theo dây và hướng vào hai đầu dây.", "Luôn hướng dọc theo dây và hướng ra ngoài hai đầu dây.", "Có phương vuông góc với dây.", "Luôn hướng thẳng đứng xuống dưới."],
+            correct: 0
+        }
+    ];
+
+    // Hàm hiển thị câu hỏi khi tải trang
+    function loadQuiz() {
+        const container = document.getElementById('quiz-container');
+        let html = '';
+
+        quizData.forEach((data, index) => {
+            html += `<div class="question-box" id="qbox-${index}">
+                <div class="question-title">${data.q}</div>
+                <div class="options">`;
+            
+            data.a.forEach((option, opIndex) => {
+                html += `<label id="label-${index}-${opIndex}">
+                    <input type="radio" name="q${index}" value="${opIndex}"> 
+                    ${String.fromCharCode(65 + opIndex)}. ${option}
+                </label>`;
+            });
+
+            html += `</div>
+                <div class="explanation" id="exp-${index}">
+                    Đáp án đúng: <strong>${String.fromCharCode(65 + data.correct)}</strong>
+                </div>
+            </div>`;
+        });
+
+        container.innerHTML = html;
+    }
+
+    // Hàm xử lý nộp bài
+    function submitQuiz() {
+        let score = 0;
+        const total = quizData.length;
+
+        quizData.forEach((data, index) => {
+            const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+            const explanation = document.getElementById(`exp-${index}`);
+            
+            // Reset màu sắc trước khi kiểm tra lại (nếu nộp nhiều lần)
+            for(let i=0; i<4; i++) {
+                document.getElementById(`label-${index}-${i}`).classList.remove('correct-answer', 'wrong-answer');
+            }
+
+            // Hiện đáp án đúng
+            document.getElementById(`label-${index}-${data.correct}`).classList.add('correct-answer');
+            explanation.style.display = 'block';
+
+            if (selectedOption) {
+                const answerValue = parseInt(selectedOption.value);
+                if (answerValue === data.correct) {
+                    score++;
+                } else {
+                    // Tô đỏ đáp án sai người dùng chọn
+                    document.getElementById(`label-${index}-${answerValue}`).classList.add('wrong-answer');
+                }
+            }
+        });
+
+        // Hiển thị kết quả
+        const resultBox = document.getElementById('result');
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `<strong>Kết quả của bạn: ${score} / ${total} câu đúng</strong><br>
+                               (${Math.round((score/total)*100)}%)`;
+        
+        // Cuộn xuống phần kết quả
+        resultBox.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Chạy hàm loadQuiz khi trang web tải xong
+    window.onload = loadQuiz;
+</script>
+
+</body>
+</html>

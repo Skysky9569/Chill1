@@ -1,0 +1,352 @@
+<meta charset="UTF-8">
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.container { padding: 1rem 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
+.tab-btn {
+  padding: 6px 14px; font-size: 13px; font-weight: 500;
+  border: 0.5px solid var(--color-border-secondary);
+  border-radius: var(--border-radius-md);
+  background: var(--color-background-primary);
+  color: var(--color-text-secondary);
+  cursor: pointer; transition: all 0.15s;
+}
+.tab-btn.active {
+  border: 2px solid red;
+  background: var(--color-background-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-primary);
+}
+.panel { display: none; }
+.panel.active { display: block; }
+.section-title {
+  font-size: 16px; font-weight: 500;
+  color: var(--color-text-primary);
+  margin: 1.25rem 0 0.75rem;
+  padding-bottom: 6px;
+  border-bottom: 0.5px solid var(--color-border-tertiary);
+}
+.card {
+  background: var(--color-background-primary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.card-label {
+  font-size: 12px; font-weight: 500;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.formula {
+  background: var(--color-background-secondary);
+  border-left: 3px solid #7F77DD;
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-text-primary);
+  margin: 6px 0;
+}
+.note {
+  background: var(--color-background-secondary);
+  border-left: 3px solid #1D9E75;
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 6px 0;
+  line-height: 1.6;
+}
+.warn {
+  background: var(--color-background-secondary);
+  border-left: 3px solid #D85A30;
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin: 6px 0;
+  line-height: 1.6;
+}
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.badge {
+  display: inline-block; font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 20px;
+  background: #EEEDFE; color: #3C3489;
+  margin-right: 4px; margin-bottom: 4px;
+}
+p { font-size: 14px; line-height: 1.7; color: var(--color-text-secondary); margin: 4px 0; }
+ul { padding-left: 1.2rem; }
+li { font-size: 14px; line-height: 1.8; color: var(--color-text-secondary); }
+strong { font-weight: 500; color: var(--color-text-primary); }
+</style>
+<div class="container">
+<div class="tabs">
+  <button class="tab-btn active" onclick="show('cong')">Năng lượng & Công</button>
+  <button class="tab-btn" onclick="show('congSuat')">Công suất</button>
+  <button class="tab-btn" onclick="show('nangLuong')">Động năng – Thế năng</button>
+  <button class="tab-btn" onclick="show('dongLuong')">Động lượng</button>
+  <button class="tab-btn" onclick="show('baoToan')">Bảo toàn ĐL</button>
+  <button class="tab-btn" onclick="show('coNang')">Cơ năng – Hiệu suất</button>
+  <button class="tab-btn" onclick="show('tron')">Chuyển động tròn</button>
+</div>
+
+<div id="cong" class="panel active">
+  <div class="section-title">Năng lượng & Công cơ học</div>
+  <div class="card">
+    <div class="card-label">Khái niệm</div>
+    <p>Công là đại lượng <strong>vô hướng</strong>, có giá trị đại số (có thể dương, âm hoặc bằng 0). Đơn vị: <strong>Jun (J)</strong> = N.m = W.s</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Công thức</div>
+    <div class="formula">A = F · s · cos α</div>
+    <p>Trong đó: F = lực (N), s = quãng đường (m), α = góc giữa lực và hướng chuyển động</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Phân loại theo góc α</div>
+    <div class="grid2">
+      <div>
+        <div class="note">α = 90° → A = 0 (lực không sinh công)<br>Ví dụ: phản lực trên mặt phẳng ngang</div>
+      </div>
+      <div>
+        <div class="note">0° ≤ α &lt; 90° → A &gt; 0 (công phát động)</div>
+      </div>
+      <div>
+        <div class="warn">90° &lt; α ≤ 180° → A &lt; 0 (công cản)<br>Ví dụ: lực ma sát, trọng lực khi đẩy lên</div>
+      </div>
+      <div>
+        <div class="note">α = 0° → A = F·s (lực song song chiều đi)</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Chuyển hóa năng lượng – cần nhớ</div>
+    <ul>
+      <li>Đun nước bằng ấm điện: <strong>điện năng → nhiệt năng</strong></li>
+      <li>Xoa hai tay vào nhau: <strong>cơ năng → nhiệt năng</strong></li>
+      <li>Bắn pháo hoa: <strong>hóa năng → nhiệt năng + quang năng</strong></li>
+      <li>Pin mặt trời: <strong>quang năng → điện năng</strong></li>
+      <li>Cây xanh quang hợp: <strong>quang năng → hóa năng</strong></li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-label">Lưu ý quan trọng</div>
+    <div class="warn">Nhiệt lượng KHÔNG phải là một dạng năng lượng (là số đo năng lượng truyền đi). Đơn vị W (oát) là đơn vị công suất, KHÔNG phải đơn vị công.</div>
+  </div>
+</div>
+
+<div id="congSuat" class="panel">
+  <div class="section-title">Công suất</div>
+  <div class="card">
+    <div class="card-label">Định nghĩa</div>
+    <p>Công suất đặc trưng cho <strong>tốc độ sinh công</strong> của vật. Đơn vị: <strong>Oát (W)</strong> = J/s = N.m/s</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Công thức</div>
+    <div class="formula">P = A / t</div>
+    <div class="formula">P = F · v</div>
+    <p>A = công (J), t = thời gian (s), F = lực (N), v = vận tốc (m/s)</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Đơn vị đặc biệt</div>
+    <div class="note">1 kW = 1000 W<br>kW.h là đơn vị của <strong>công</strong> (không phải công suất):<br>1 kW.h = 3 600 000 J = 3,6×10⁶ J</div>
+    <div class="warn">J.s KHÔNG phải đơn vị công suất. P = At (sai), P = Fv² (sai).</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Lưu ý</div>
+    <ul>
+      <li>Người đứng yên giữ vật → không có chuyển dời → <strong>P = 0</strong></li>
+      <li>Khi vật chuyển động thẳng đều dưới lực kéo F: P = Fv</li>
+      <li>Thời gian tối thiểu khi biết công suất: t = A/P</li>
+    </ul>
+  </div>
+</div>
+
+<div id="nangLuong" class="panel">
+  <div class="section-title">Động năng – Thế năng</div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Động năng</div>
+      <div class="formula">Wđ = ½ · m · v²</div>
+      <p>Vô hướng, <strong>không âm</strong> (≥ 0). Phụ thuộc vào hệ quy chiếu. Đơn vị: J</p>
+    </div>
+    <div class="card">
+      <div class="card-label">Thế năng trọng trường</div>
+      <div class="formula">Wt = m · g · h</div>
+      <p>Có thể dương, âm hoặc bằng 0 (phụ thuộc mốc). Đơn vị: J</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Định lý động năng</div>
+    <div class="formula">A(tổng hợp lực) = Wđ₂ − Wđ₁ = ΔWđ</div>
+    <p>Công của tổng hợp lực bằng độ biến thiên động năng.</p>
+  </div>
+  <div class="card">
+    <div class="card-label">So sánh động năng khi thay đổi m và v</div>
+    <ul>
+      <li>m giảm 4 lần, v tăng 2 lần → Wđ = ½·(m/4)·(2v)² = ½mv² → <strong>không đổi</strong></li>
+      <li>m tăng 4 lần, v giảm 2 lần → Wđ = ½·(4m)·(v/2)² = ½mv² → <strong>không đổi</strong></li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-label">Lưu ý quan trọng</div>
+    <div class="warn">Lực vuông góc với vận tốc (ví dụ: lực hướng tâm, phản lực) KHÔNG làm thay đổi động năng.</div>
+    <div class="note">Hiệu thế năng giữa hai điểm chỉ phụ thuộc chênh lệch độ cao theo phương thẳng đứng và khối lượng vật, KHÔNG phụ thuộc hình dạng đường đi.</div>
+    <div class="note">Công tối thiểu nâng vật từ mặt đất lên cao h: A = mgh (nâng đều)</div>
+  </div>
+</div>
+
+<div id="dongLuong" class="panel">
+  <div class="section-title">Động lượng</div>
+  <div class="card">
+    <div class="card-label">Định nghĩa & công thức</div>
+    <div class="formula">\( \vec{p} = m \cdot \vec{v} \) </div>
+    <p>Đơn vị: <strong>kg.m/s = N.s</strong>. Cùng phương, cùng chiều với \( \vec{v} \).</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Xung lực & biến thiên động lượng</div>
+    <div class="formula"> \( \vec{p} \cdot \Delta t = \Delta \vec{p} = \vec{p_2} - \vec{p_1} \)</div>
+    <p>Xung lực của F trong thời gian Δt bằng độ biến thiên động lượng.</p>
+    <div class="note">Đây là dạng khác của Định luật II Newton: \(\vec{F} = \frac{\Delta \vec{p}}{\Delta t}  \)</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Mối quan hệ động lượng – động năng</div>
+    <div class="formula"> \(p = \sqrt{2m*Wđ} \)</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Trường hợp đặc biệt – tổng động lượng hai vật</div>
+    <ul>
+      <li>Cùng chiều: \(p = p_1 + p_2 \) </li>
+      <li>Ngược chiều: \(p = | p_1 - p_2 | \) </li>
+      <li>Vuông góc: \(p = \sqrt{p_1^2 + p_2^2} \) </li>
+      <li>Tạo 1 góc \(\alpha \): \(p = \sqrt{p_1^2 + p_2^2 + 2p_1p_2cos \alpha} \) (dùng định lý cosin)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-label">Lưu ý</div>
+    <div class="warn">Khi rơi tự do: động lượng thay đổi cả về độ lớn lẫn hướng? → Sai! Rơi tự do chỉ thay đổi về ĐỘ LỚN (hướng không đổi – thẳng đứng xuống). Khi chuyển động thẳng đều: động lượng KHÔNG thay đổi.</div>
+  </div>
+</div>
+
+<div id="baoToan" class="panel">
+  <div class="section-title">Định luật bảo toàn động lượng</div>
+  <div class="card">
+    <div class="card-label">Hệ kín (hệ cô lập)</div>
+    <p>Hệ không có ngoại lực tác dụng (hoặc ngoại lực triệt tiêu nhau). Trong hệ kín: <strong>tổng động lượng bảo toàn</strong>.</p>
+    <div class="formula"> \(m_1v_1 + m_2v_2 = m_1v_1' + m_2v_2' \) </div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-label">Va chạm mềm (dính lại)</div>
+      <div class="formula"> \(m_1v_1 + m_2v_2 = (m_1 + m_2)V \) </div>
+      <div class="formula"> Nhiệt tỏa ra: \(Q = Wđtrước - Wđsau \) </div>
+      <div class="note">Động lượng bảo toàn. Động năng KHÔNG BẢO TUÀN (biến thành nhiệt, biến dạng).</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Va chạm đàn hồi</div>
+      <div class="formula"> \(v_1' = \frac{m_1 - m_2}{m_1 + m_2} \) ; \(v_2' = \frac{2m_1}{m_1 + m_2} \)</div>
+      <div class="note">Sau va chạm hai vật tách rời nhau. Động lượng bảo toàn. Động năng cũng bảo toàn.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Vật tách ra từ trạng thái đứng yên</div>
+    <div class="formula"> \(m_1v_1 + m_2v_2 = (m_1 + m_2)V \)</div>
+    <div class="note">Hai phần chuyển động ngược chiều nhau. Tích m·v của mỗi phần có độ lớn bằng nhau (độ lớn động lượng bằng nhau). Vật nhẹ hơn → vận tốc lớn hơn.</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Hệ kín ban đầu đứng yên → một phần chuyển động</div>
+    <div class="warn">Phần còn lại chuyển động theo hướng NGƯỢC LẠI (không phải đứng yên, không phải cùng chiều).</div>
+  </div>
+</div>
+
+<div id="coNang" class="panel">
+  <div class="section-title">Cơ năng – Hiệu suất</div>
+  <div class="card">
+    <div class="card-label">Cơ năng</div>
+    <div class="formula"> \(W = Wđ + Wt = \frac{1}{2} mv^2 + mgh\) </div>
+    <p>Cơ năng có thể âm, dương hoặc bằng 0. Được bảo toàn khi <strong>chỉ có lực thế</strong> (không có ma sát, lực cản).</p>
+  </div>
+  <div class="card">
+    <div class="card-label">Bảo toàn cơ năng</div>
+    <div class="formula">\(W_1 + W_2 = \frac{1}{2} mv_1^2 + mgh_1 = \frac{1}{2} mv_2^2 + mgh_2 \)</div>
+    <div class="note">Rơi tự do: cơ năng bảo toàn. Khi \(Wđ = Wt => \frac{1}{2}mv^2 = mgh \)</div>
+    <div class="warn">Chuyển động có ma sát, trong chất lỏng → cơ năng GIẢM.</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Hiệu suất</div>
+    <div class="formula">H = Wci / Wtp × 100% = Aci / Atp × 100%</div>
+    <div class="note">Wci = năng lượng có ích,Whp = năng lượng hao phí ,Wtp = năng lượng toàn phần = Wci + Whp</div>
+    <div class="note">Hiệu suất luôn \(\le \) 1 (nhỏ hơn hoặc bằng 100%). Hiệu suất càng cao → năng lượng hao phí càng ít.</div>
+    <div class="warn">Hiệu suất = Wci / Wtp</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Ném vật – bảo toàn cơ năng (bỏ qua sức cản)</div>
+    <ul>
+      <li>Ba vật ném từ cùng độ cao với cùng tốc độ đầu (khác hướng) → chạm đất <strong>cùng tốc độ</strong></li>
+      <li>Từ M ném lên, lên đến N dừng lại: thế năng tăng, động năng giảm, cơ năng không đổi</li>
+    </ul>
+  </div>
+</div>
+
+<div id="tron" class="panel">
+  <div class="section-title">Chuyển động tròn đều</div>
+  <div class="card">
+    <div class="card-label">Các đại lượng cơ bản</div>
+    <div class="grid2">
+      <div>
+        <div class="formula">T = 1/f = 2π/ω</div>
+        <p>T: chu kì (s), f: tần số (Hz = vòng/s)</p>
+      </div>
+      <div>
+        <div class="formula">ω = 2πf = 2π/T</div>
+        <p>ω: tốc độ góc (rad/s)</p>
+      </div>
+      <div>
+        <div class="formula">v = ω · r</div>
+        <p>v: tốc độ dài (m/s), r: bán kính (m)</p>
+      </div>
+      <div>
+        <div class="formula">θ = s/r</div>
+        <p>θ: góc quét (rad), s: cung (m)</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Gia tốc hướng tâm & lực hướng tâm</div>
+    <div class="formula">aht = v²/r = ω²r = 4π²r/T²</div>
+    <div class="formula">Fht = m·aht = mv²/r = mω²r</div>
+    <div class="note">Gia tốc hướng tâm luôn hướng vào tâm quỹ đạo. Độ lớn không đổi nhưng hướng luôn thay đổi.</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Tính chất vectơ vận tốc trong CĐTĐ</div>
+    <ul>
+      <li>Có độ lớn <strong>không đổi</strong></li>
+      <li>Có phương <strong>tiếp tuyến</strong> với quỹ đạo</li>
+      <li>Hướng <strong>luôn thay đổi</strong> → vectơ vận tốc KHÔNG bảo toàn</li>
+      <li>Là đại lượng <strong>có hướng</strong> (không phải vô hướng)</li>
+    </ul>
+    <div class="warn">Trong CĐTĐ có cùng tốc độ dài: bán kính lớn → chu kì lớn (T tỉ lệ thuận r). Tốc độ góc ω tỉ lệ nghịch r.</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Quy đổi hay dùng</div>
+    <ul>
+      <li>n vòng/phút → ω = πn/30 (rad/s)</li>
+      <li>Kim phút: T = 3600 s; Kim giây: T = 60 s; Kim giờ: T = 43200 s</li>
+      <li>Mặt đường vòng nâng lên một bên: tạo thành phần lực hướng tâm</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
